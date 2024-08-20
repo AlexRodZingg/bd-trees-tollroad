@@ -4,6 +4,10 @@
 // import java.util.Map;
 // import java.util.TreeMap;
 
+import java.util.Comparator;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 /**
  * Application to demonstrate a TreeMap storing key:value pairs in sorted
  * order based on natural ordering of keys and also a different ordering
@@ -12,6 +16,8 @@
 public class TollRoad {
     // TODO 1: Declare two Map variables to associate String keys with Vehicle objects.
     // TODO 1: One will sort by vehicle description and one will sort by vehicle state.
+    SortedMap<String, Integer> plateIdentifier;
+    SortedMap<String, Integer> stateIdentifier;
 
 
 
@@ -23,8 +29,17 @@ public class TollRoad {
     public TollRoad() {
         // TODO 2: Create the two TreeMap objects, the second of which must be
         // TODO 2: given an appropriate Comparator object when constructed.
+        Comparator<String> ignoreFirstCharComparator = new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                String sub1 = s1.substring(1);
+                String sub2 = s2.substring(1);
+                return sub1.compareTo(sub2);
+            }
+        };
 
-
+        plateIdentifier = new TreeMap<>();
+        stateIdentifier = new TreeMap<>(ignoreFirstCharComparator);
     }
 
     /**
@@ -37,7 +52,8 @@ public class TollRoad {
      */
     public void addToll(String description) {
         // TODO 3: Complete this method as described in the exercise.
-
+        plateIdentifier.put(description, plateIdentifier.getOrDefault(description, 0) + 1);
+        stateIdentifier.put(description, stateIdentifier.getOrDefault(description, 0) + 1);
     }
 
     /**
@@ -48,7 +64,12 @@ public class TollRoad {
      */
     public String getVehicleReportByDescription() {
         // TODO 4: Complete this method as described in the exercise.
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (String plate : plateIdentifier.keySet()) {
+            sb.append("Description: " + plate + ", Toll Count: " + plateIdentifier.get(plate));
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     /**
@@ -59,7 +80,12 @@ public class TollRoad {
      */
     public String getVehicleReportByState() {
         // TODO 5: Complete this method as described in the exercise.
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (String plate : stateIdentifier.keySet()) {
+            sb.append("Description: " + plate + ", Toll Count: " + plateIdentifier.get(plate));
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     /**
